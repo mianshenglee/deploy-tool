@@ -54,7 +54,9 @@
 -   具体使用示例请见`在线文档`及相关示例说明
 
 ## 问题及反馈
+
 	使用过程中问题可发邮件到mianshenglee@foxmail.com
 
 ## License
+
  deploy-tool 使用 Apache 2.0 license. 具体请查看 [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0) 。
