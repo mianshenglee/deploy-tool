@@ -1,4 +1,4 @@
-<h2 align="center">Deploy-tool</h2>
+<h2 align="center">deploy-tool</h2>
 
 <p align="center">
   deploy tool for products and software installation
