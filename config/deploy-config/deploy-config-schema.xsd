@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="deployment">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="properties" minOccurs="0" />
+				<xs:element ref="executions" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- ************************************properties 元素*********************************** -->
+	<xs:element name="properties">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="property" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="property">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="key" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				<xs:element ref="value" />
+			</xs:sequence>
+			<xs:attribute name="key" type="xs:string"/>
+			<xs:attribute name="force" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="value">
+		<xs:complexType mixed="true">
+			<xs:sequence minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="function" />
+				<xs:element ref="args" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--限制函数选项 -->
+	<xs:element name="function">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="encryptForBingoDisk" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="args">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="arg" type="xs:string" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- ************************************executions元素*********************************** -->
+	<xs:element name="executions">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="group" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="group">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="execution" maxOccurs="unbounded" />
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string"></xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="execution">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="id" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="display" minOccurs="0" maxOccurs="1" />
+				<xs:element name="class-name" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="configuration" minOccurs="0" />
+				<xs:element ref="dependencies" minOccurs="0" />
+				<xs:element ref="sub-execution" minOccurs="0" />
+			</xs:sequence>
+			<xs:attribute name="name" type="xs:string"/>
+			<xs:attribute name="id" type="xs:string"/>
+			<xs:attribute ref="display"/>
+			<xs:attribute name="class-name" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:attribute name="display">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="false"/>
+				<xs:enumeration value="true"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:element name="display">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="false" />
+				<xs:enumeration value="true" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<!--configuration -->
+	<xs:element name="configuration">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="replace-files" minOccurs="0" />
+				<xs:element ref="commands" minOccurs="0" />
+				<xs:element ref="datasource" minOccurs="0" />
+				<xs:element ref="statements" minOccurs="0" />
+				<xs:element ref="args" minOccurs="0" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!--replace-files -->
+	<xs:element name="replace-files">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="replace-file" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<!-- replace-file -->
+	<xs:element name="replace-file">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="target" maxOccurs="unbounded" />
+			</xs:sequence>
+			<xs:attribute name="file-type" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="target">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="source" type="xs:string"  minOccurs="0" maxOccurs="1"/>
+				<xs:element name="destination" type="xs:string"  minOccurs="0" maxOccurs="1"/>
+				<xs:element name="file-path" type="xs:string"  minOccurs="0" maxOccurs="1"/>
+				<xs:element ref="replacement" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="condiction">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value=".+==.+" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="replacement">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="find-type" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="find-key" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="replace-type" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="replace-attr-name" type="xs:string" minOccurs="0" maxOccurs="1" />
+				<xs:element name="replace-value" type="xs:string" minOccurs="0" maxOccurs="1" />
+			</xs:sequence>
+			<xs:attribute name="find-type" type="xs:string"/>
+			<xs:attribute name="find-key" type="xs:string"/>
+			<xs:attribute name="replace-type" type="xs:string"/>
+			<xs:attribute name="replace-attr-name" type="xs:string"/>
+			<xs:attribute name="replace-value" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="commands">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="command" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="command">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="exec" type="xs:string" minOccurs="1" maxOccurs="1" />
+				<xs:element ref="args" minOccurs="0" />
+			</xs:sequence>
+			<xs:attribute name="charset" type="xs:string"></xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="datasource">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="driver-class-name" type="xs:string" />
+				<xs:element name="url" type="xs:string" />
+				<xs:element name="username" type="xs:string" />
+				<xs:element name="password" type="xs:string" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="statements">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="statement" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="statement">
+		<xs:complexType mixed="true">
+			<xs:attribute name="condiction">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value=".+==.+" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!--dependencies -->
+	<xs:element name="dependencies">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="dependency" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="dependency">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ref-id" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				<xs:element ref="result" minOccurs="0" />
+			</xs:sequence>
+			<xs:attribute name="ref-id" type="xs:string"/>
+			<xs:attribute name="condiction">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value=".+==.+" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="result">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="success" minOccurs="0" />
+				<xs:element ref="fail" minOccurs="0" />
+			</xs:sequence>
+			<xs:attribute name="skip" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="false" />
+						<xs:enumeration value="true" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="success">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="move" />
+				<xs:enumeration value="stop" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<xs:element name="fail">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="move" />
+				<xs:enumeration value="stop" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	<!-- sub-execution -->
+	<xs:element name="sub-execution">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="execution" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="deploy-config-schema.xsd">
+	<executions>
+		<group name="数据库全部安装与卸载">
+			<execution name="全部安装" id="installDbAll" display="true" class-name="deploy.OperRunDependency">
+				<dependencies>
+					<dependency ref-id="installMysqlAndInitDb"/>
+					<dependency ref-id="installRedis"/>
+				</dependencies>
+			</execution>
+			<execution name="全部卸载" id="uninstallDbAll" display="true" class-name="deploy.OperRunDependency">
+				<dependencies>
+					<dependency ref-id="uninstallMysql"/>
+					<dependency ref-id="uninstallRedis"/>
+				</dependencies>
+			</execution>
+		</group>
+		<group name="MySQL安装与卸载">
+			<execution name="安装MySQL及初始化数据库" id="installMysqlAndInitDb" display="true" class-name="deploy.OperRunDependency">
+				<dependencies>
+					<dependency ref-id="installMysql"/>
+					<dependency ref-id="createMysqlDb"/>
+				</dependencies>
+				<sub-execution>
+					<execution name="安装MySQL" id="installMysql" display="true" class-name="deploy.OperRunCommand">
+						<configuration>
+							<commands>
+								<command charset="utf-8">
+									<exec><![CDATA[scripts/linux/db/mariadb/install_mysqldb.sh]]></exec>
+									<args>
+										<arg><![CDATA[$${server.mysql.db.password}]]></arg>
+									</args>
+								</command>
+								<!-- 开通端口 -->
+								<command charset="utf-8">
+									<exec><![CDATA[scripts/linux/common/add_port.sh]]></exec>
+									<args>
+										<arg><![CDATA[$${server.mysql.port}]]></arg>
+									</args>
+								</command>
+							</commands>
+						</configuration>
+						<dependencies>
+							<dependency ref-id="updateConfigFiles"/>
+							<dependency ref-id="chmodFile"/>
+							<dependency ref-id="syncOsTime"/>
+						</dependencies>
+					</execution>
+					<execution name="初始化MySQL数据库" id="createMysqlDb" display="true" class-name="deploy.OperRunCommand">
+						<configuration>
+							<commands>
+								<command charset="utf-8">
+									<exec><![CDATA[scripts/linux/db/mariadb/import_mysql_sql.sh]]></exec>
+									<args>
+										<arg><![CDATA[$${server.mysql.db.username}]]></arg>
+										<arg><![CDATA[$${server.mysql.db.password}]]></arg>
+										<arg><![CDATA[$${server.mysql.port}]]></arg>
+									</args>
+								</command>
+							</commands>
+						</configuration>
+						<dependencies>
+							<dependency ref-id="updateConfigFiles"/>
+							<dependency ref-id="chmodFile"/>
+							<dependency ref-id="syncOsTime"/>
+						</dependencies>
+					</execution>
+				</sub-execution>
+			</execution>
+			<execution name="卸载MySQL" id="uninstallMysql" display="true" class-name="deploy.OperRunCommand">
+				<configuration>
+					<commands>
+						<command charset="utf-8">
+							<exec><![CDATA[scripts/linux/db/mariadb/uninstall_mysql.sh]]></exec>
+							<args>
+								<arg><![CDATA[$${server.mysql.db.username}]]></arg>
+								<arg><![CDATA[$${server.mysql.db.password}]]></arg>
+							</args>
+						</command>
+						<!-- 关闭端口 -->
+						<command charset="utf-8">
+							<exec><![CDATA[scripts/linux/common/delete_port.sh]]></exec>
+							<args>
+								<arg><![CDATA[$${server.mysql.port}]]></arg>
+							</args>
+						</command>
+					</commands>
+				</configuration>
+				<dependencies>
+					<dependency ref-id="updateConfigFiles"/>
+					<dependency ref-id="chmodFile"/>
+				</dependencies>
+			</execution>
+		</group>
+		<group name="Redis安装与卸载">
+			<execution name="安装Redis" id="installRedis" display="true" class-name="deploy.OperRunCommand">
+				<configuration>
+					<commands>
+						<command charset="utf-8">
+							<exec><![CDATA[scripts/linux/db/redis/install_redis.sh]]></exec>
+						</command>
+						<!-- 开通端口 -->
+						<command charset="utf-8">
+							<exec><![CDATA[scripts/linux/common/add_port.sh]]></exec>
+							<args>
+								<arg><![CDATA[$${server.redis.port}]]></arg>
+							</args>
+						</command>
+					</commands>
+				</configuration>
+				<dependencies>
+					<dependency ref-id="updateConfigFiles"/>
+					<dependency ref-id="chmodFile"/>
+					<dependency ref-id="syncOsTime"/>
+				</dependencies>
+			</execution>
+			<execution name="卸载Redis" id="uninstallRedis" display="true" class-name="deploy.OperRunCommand">
+				<configuration>
+					<commands>
+						<command charset="utf-8">
+							<exec><![CDATA[scripts/linux/db/redis/uninstall_redis.sh]]></exec>
+						</command>
+						<!-- 关闭端口 -->
+						<command charset="utf-8">
+							<exec><![CDATA[scripts/linux/common/delete_port.sh]]></exec>
+							<args>
+								<arg><![CDATA[$${server.redis.port}]]></arg>
+							</args>
+						</command>
+					</commands>
+				</configuration>
+				<dependencies>
+					<dependency ref-id="updateConfigFiles"/>
+					<dependency ref-id="chmodFile"/>
+				</dependencies>
+			</execution>
+		</group>
+		<group name="基本功能">
+			<execution name="更新配置及脚本文件" id="updateConfigFiles" display="true" class-name="deploy.OperUpdateFile">
+				<configuration>
+					<replace-files>
+						<replace-file file-type="template">
+							<!-- mysql -->
+							<target>
+								<source><![CDATA[template/linux/db/software/mariadb/my.cnf]]></source>
+								<destination><![CDATA[$${deployment_home}/software/mariadb/my.cnf]]></destination>
+							</target>
+							<!-- 更新库脚本 -->
+							<target>
+								<source><![CDATA[template/linux/db/resource/sql/dorcst.sql]]></source>
+								<destination><![CDATA[$${deployment_home}/resource/sql/dorcst.sql]]></destination>
+							</target>
+							<!-- redis -->
+							<target>
+								<source><![CDATA[template/linux/db/software/redis/redis.conf]]></source>
+								<destination><![CDATA[$${deployment_home}/software/redis/redis.conf]]></destination>
+							</target>
+							<target>
+								<source><![CDATA[template/linux/db/software/redis/bin/redisd.sh]]></source>
+								<destination><![CDATA[$${deployment_home}/software/redis/bin/redisd.sh]]></destination>
+							</target>
+						</replace-file>
+					</replace-files>
+				</configuration>
+			</execution>
+			<execution name="修改文件执行权限" id="chmodFile" display="true" class-name="deploy.OperRunCommand">
+				<configuration>
+					<commands>
+						<command charset="utf-8">
+							<exec><![CDATA[scripts/linux/db/chmod_db_files.sh]]></exec>
+						</command>
+					</commands>
+				</configuration>
+			</execution>
+			<execution name="调整系统时间同步间隔" id="syncOsTime" display="true" class-name="deploy.OperRunCommand">
+				<configuration>
+					<commands>
+						<command charset="utf-8">
+							<exec><![CDATA[scripts/linux/common/sync_os_time.sh]]></exec>
+						</command>
+					</commands>
+				</configuration>
+			</execution>
+			<execution name="查看配置参数" id="listConfigData" display="true" class-name="deploy.OperListConfig"/>
+		</group>
+	</executions>
+</deployment>
