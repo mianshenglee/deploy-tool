@@ -15,6 +15,6 @@ ${JRE_HOME}/bin/java -jar ${TOOL_HOME}/telnet-tool.jar 127.0.0.1 ${db_port} 1000
 
 #执行建库脚本
 echo "正在创建dorcst库,时间可能会较长,请稍候..."
-${MYSQL_HOME}/bin/mysql -u${db_username} -p${db_password} --socket=${MYSQL_HOME}/var/mysql.sock < ${SQL_HOME}/dorcst.sql
+${MYSQL_HOME}/bin/mysql -u${db_username} -p${db_password} --socket=${MYSQL_HOME}/var/mysql.sock < ${SQL_HOME}/mytest.sql
 
 echo "dorcst库安装成功"

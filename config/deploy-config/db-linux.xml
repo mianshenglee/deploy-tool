@@ -147,8 +147,8 @@
 							</target>
 							<!-- 更新库脚本 -->
 							<target>
-								<source><![CDATA[template/linux/db/resource/sql/dorcst.sql]]></source>
-								<destination><![CDATA[$${deployment_home}/resource/sql/dorcst.sql]]></destination>
+								<source><![CDATA[template/linux/db/resource/sql/mytest.sql]]></source>
+								<destination><![CDATA[$${deployment_home}/resource/sql/mytest.sql]]></destination>
 							</target>
 							<!-- redis -->
 							<target>
