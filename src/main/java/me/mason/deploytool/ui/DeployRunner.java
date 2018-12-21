@@ -129,7 +129,7 @@ public class DeployRunner {
             statusStr = oper.execute();
         }
         logger.debug(Constants.lineFlag + "\"" + option + "\"结束。 操作结果：" + statusStr);
-        logger.debug(FileUtils.lineSeparator);
+        System.out.println(FileUtils.lineSeparator);
     }
 
     /**
