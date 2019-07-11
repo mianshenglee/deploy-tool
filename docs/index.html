@@ -37,6 +37,7 @@
   <script src="//unpkg.com/prismjs/components/prism-java.min.js"></script>
   <script src="//unpkg.com/prismjs/components/prism-sql.min.js"></script>
   <script src="//unpkg.com/prismjs/components/prism-bash.min.js"></script>
+  <script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
   <script>
   const gitalk = new Gitalk({
     clientID: '7d4db5fc9706f15b7a7f',
@@ -46,7 +47,7 @@
     admin: ['mianshenglee'],
     // facebook-like distraction free mode
     distractionFreeMode: false,
-	id: (location.pathname).split("/").pop().substring(0, 49)
+	id: md5(location.pathname)
   })
 </script>
 </body>
