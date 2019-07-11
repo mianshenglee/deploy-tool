@@ -42,7 +42,7 @@
 
 ## 在线文档
 
--   [`github`在线帮助文档](https://mianshenglee.github.io/deploy-tool)
+-   [`github`在线帮助文档](https://mianshenglee.github.io/deploy-tool/#/)
 -   [`看云`在线帮助文档](https://www.kancloud.cn/masonlee/deploy-tool-help-doc/883192)
 -   [linux使用示例](https://pan.baidu.com/s/1Da5fCkbwZpckiQVfOrBwhQ)    提取码：`l8qu`，压缩包中有使用帮助文档`readme.txt`，按里面说明操作即可。
 -   [windows使用示例](https://pan.baidu.com/s/1lvSRXa0zN7Hpy_vZFhyubA)  提取码：`kohq`，压缩包中有使用帮助文档`readme.txt`，按里面说明操作即可。
