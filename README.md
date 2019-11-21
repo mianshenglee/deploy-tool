@@ -1,5 +1,4 @@
 <h2 align="center">deploy-tool</h2>
-
 <p align="center">
   deploy tool for products and software installation
 </p>
@@ -57,9 +56,14 @@
 -   打包出来的deploy-tool.jar即为部署工具
 -   具体使用示例请见`在线文档`及相关示例说明
 
-## 问题及反馈
+## 与我交流
 
-	使用过程中问题可发邮件到mianshenglee@foxmail.com
+可以使用以下几种方式一起交流：
+
+- [在项目中提issue](https://github.com/mianshenglee/spring-batch-example/issues)：`https://github.com/mianshenglee/spring-batch-example/issues`
+- 微信公众号：![mason技术记录](https://mianshenglee.github.io/public/img/wx-qrcode.jpg)
+- [我的博客](https://mianshenglee.github.io/)：`https://mianshenglee.github.io/`
+- 我的邮箱：`mianshenglee@foxmail.com`
 
 ## License
 
